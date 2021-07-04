@@ -6,7 +6,6 @@ import numpy as np
 import io
 import joblib
 from PIL import Image
-import cv2
 # to retrieve and send back data
 
 app = Flask(__name__) # Crea el servidor
@@ -33,12 +32,12 @@ model = load_model1()
 
 def preprocess(decoded):
     #resize and convert in RGB in case image is in RGBA
-    # pil_image = Image.open(io.BytesIO(decoded)).convert("L") 
-    pil_image = cv2.imdecode(np.frombuffer(decoded, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
+    pil_image = Image.open(io.BytesIO(decoded)).convert("L") 
+    # pil_image = cv2.imdecode(np.frombuffer(decoded, dtype=np.uint8), cv2.IMREAD_UNCHANGED)
     # pil_image = Image.open(io.BytesIO(pil_image)).convert("L") 
     # print(pil_image.shape)
-    supp_pil = Image.fromarray(pil_image).convert("L") 
-    image = np.asarray(supp_pil).reshape((1, IMG_SHAPE[0]*IMG_SHAPE[1]))# .reshape((1, IMG_SHAPE[0], IMG_SHAPE[1], 1))
+    # supp_pil = Image.fromarray(pil_image).convert("L") 
+    image = np.asarray(pil_image).reshape((1, IMG_SHAPE[0]*IMG_SHAPE[1]))# .reshape((1, IMG_SHAPE[0], IMG_SHAPE[1], 1))
     # image = np.expand_dims(pil_image, -1)
     # batch = np.expand_dims(image, axis=0)
     
