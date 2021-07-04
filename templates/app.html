@@ -42,7 +42,7 @@
             let message = {image: base64Image}
             // you could also use 127.0.0.1 instead of 0.0.0.0 
             $.post("http://127.0.0.1:4000/predict", JSON.stringify(message), function(response){
-            $("#prediction").text("results: "+ response.prediction[0] + " with probability: " + response.prediction[1]);
+            $("#prediction").text("results: " + response.prediction);
                 console.log(response);
             });
         });       

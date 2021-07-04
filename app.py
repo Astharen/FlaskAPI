@@ -26,7 +26,9 @@ def decode_request(req):
     return decoded
 
 def load_model1():
-    new_model = keras.models.load_model('model.h5')
+    # new_model = keras.models.load_model('model.h5')
+    file = open('model.pkl', "rb")
+    new_model = joblib.load(file)
     return new_model
 
 model = load_model1()
@@ -38,7 +40,7 @@ def preprocess(decoded):
     # pil_image = Image.open(io.BytesIO(pil_image)).convert("L") 
     # print(pil_image.shape)
     supp_pil = Image.fromarray(pil_image).convert("L") 
-    image = np.asarray(supp_pil).reshape((1, IMG_SHAPE[0], IMG_SHAPE[1], 1))
+    image = np.asarray(supp_pil).reshape((1, IMG_SHAPE[0]*IMG_SHAPE[1]))# .reshape((1, IMG_SHAPE[0], IMG_SHAPE[1], 1))
     # image = np.expand_dims(pil_image, -1)
     # batch = np.expand_dims(image, axis=0)
     
@@ -58,14 +60,11 @@ def predict():
     image = decode_request(req)
     batch = preprocess(image)
     print(batch.shape)
-    # actual prediction of the model
     predictions = model.predict(batch)[0]
     print(predictions)
-    pred_list = [np.argmax(predictions), predictions[np.argmax(predictions)]]
-    # get the label of the predicted class
-    # top_label = [(i[1],str(i[2])) for i in decode_predictions(prediction)[0][0]]
-    # create the response as a dict
-    response = {"prediction": [str(pred_list[0]), str(pred_list[1])]}
+    # pred_list = [np.argmax(predictions), predictions[np.argmax(predictions)]]
+    # response = {"prediction": [str(pred_list[0]), str(pred_list[1])]}
+    response = {"prediction": str(predictions)}
     print("[+] results {}".format(response))
     
     return jsonify(response) # return it as json
